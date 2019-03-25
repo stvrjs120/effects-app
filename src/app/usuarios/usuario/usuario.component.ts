@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
 
 import * as usuarioAction from '../../store/actions';
+import { Usuario } from 'src/app/models/usuario.model';
 
 @Component({
   selector: 'app-usuario',
@@ -11,6 +12,10 @@ import * as usuarioAction from '../../store/actions';
   styles: []
 })
 export class UsuarioComponent implements OnInit {
+
+  user: Usuario;
+  loading: boolean;
+  error: any;
 
   constructor(private route: ActivatedRoute,
               private store: Store<AppState>) { }
@@ -20,6 +25,13 @@ export class UsuarioComponent implements OnInit {
       .subscribe(params => {
         const id = params['id'];
         this.store.dispatch(new usuarioAction.CargarUsuario(id));
+      });
+
+    this.store.select('usuario')
+      .subscribe(usuario => {
+        this.user = usuario.user;
+        this.loading = usuario.loading;
+        this.error = usuario.error;
       });
   }
 
